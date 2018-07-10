@@ -1,0 +1,24 @@
+{
+    "name": "vispamir/idpay",
+    "description": "Payment gateway on idpay.ir",
+    "license": "GPL-2.0-only",
+    "authors": [
+        {
+            "name": "amir koulivand",
+            "email": "amir@koulivand.ir"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "guzzlehttp/guzzle": "^6.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "6.3.*",
+        "satooshi/php-coveralls": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Idpay\\": "src/"
+        }
+    }
+}
