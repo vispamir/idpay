@@ -49,23 +49,27 @@ class Idpay
             'callback'      => $callback,
         ];
 
-        if (!is_null($name)) {
+        if (!is_null($name) && !empty($name)) {
             $data['name'] = $name;
         }
-        if (!is_null($phone)) {
+        if (!is_null($phone) && !empty($phone)) {
             $data['phone'] = $phone;
         }
-        if (!is_null($description)) {
+        if (!is_null($description) && !empty($description)) {
             $data['description'] = $description;
         }
 
         $result = $this->service->paymentRequest($data);
 
-        if (empty($results['link'])) {
-            $this->paymentPath = $results['link'];
+        if ($result['Status'] == 'success') {
+            if (isset($result['Result'])) {
+                $this->paymentPath = $result['Result']['link'];
+            }
+
+            return $result['Result'];
         }
 
-        return $result;
+        return false;
     }
 
     /**

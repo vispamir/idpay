@@ -34,15 +34,15 @@ class RestService
     {
         $result = $this->httpRequest('payment', $data);
 
-        if ($result['Status'] == 201) {
+        if ($result['code'] == 201) {
             return [
                 'Status' => 'success',
-                'Result' => $result,
+                'Result' => $result['data'],
             ];
         } else {
             return [
                 'Status' => 'error',
-                'Message' => $result,
+                'Message' => $result['message'],
             ];
         }
     }
@@ -58,15 +58,15 @@ class RestService
     {
         $result = $this->httpRequest('payment/inquiry', $data);
 
-        if ($result['Status'] == 200) {
+        if ($result['code'] == 200) {
             return [
                 'Status' => 'success',
-                'Result' => $result,
+                'Result' => $result['data'],
             ];
         } else {
             return [
                 'Status' => 'error',
-                'error'  => !empty($result['message']) ? $result['message'] : null,
+                'Message'  => !empty($result['message']) ? $result['message'] : null,
             ];
         }
     }
@@ -94,22 +94,30 @@ class RestService
                 ]
             );
 
-            $status = $response->getStatusCode();
             $result = $response->getBody()->getContents();
             $result = json_decode($result, true);
+
+            return [
+                'Status' => true,
+                'code' => $response->getStatusCode(),
+                'data' => $result,
+            ];
         } catch (RequestException $e) {
+
             $result = [
                 'Status' => false,
                 'message' => "Connection failed.",
             ];
+
             $response = $e->getResponse();
             if (!is_null($response)) {
-                $result = $response->getBody()->getContents();
-                $result = json_decode($result, true);
+                $result['message'] = $response->getBody()->getContents();
+                $result['message'] = json_decode($result, true);
+                $result['code'] = $response->getStatusCode();
             }
-        }
 
-        return $result;
+            return $result;
+        }
     }
 
     /**
