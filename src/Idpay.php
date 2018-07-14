@@ -20,6 +20,7 @@ use Idpay\Bin\RestService;
 class Idpay
 {
     private $service;
+    private $trackId;
     private $paymentPath = 'https://www.idpay.ir/p/ws/';
 
     public function __construct($apiKey, $endpoint)
@@ -44,9 +45,9 @@ class Idpay
     public function payment($callback, $orderId, $amount, $name = null, $phone = null, $description = null)
     {
         $data = [
-            'amount'        => $amount,
-            'order_id'      => $orderId,
-            'callback'      => $callback,
+            'amount'    => $amount,
+            'order_id'  => $orderId,
+            'callback'  => $callback,
         ];
 
         if (!is_null($name) && !empty($name)) {
@@ -63,6 +64,7 @@ class Idpay
 
         if ($result['Status'] == 'success') {
             if (isset($result['Result'])) {
+                $this->trackId = $result['Result']['id'];
                 $this->paymentPath = $result['Result']['link'];
             }
 
@@ -83,7 +85,7 @@ class Idpay
     public function inquiry($trackId, $orderId, $amount)
     {
         $data = [
-            'track_id' => $trackId,
+            'id' => $trackId,
             'order_id'  => $orderId
         ];
 
@@ -100,5 +102,31 @@ class Idpay
     {
         header('Location: '. $this->paymentPath);
         exit;
+    }
+
+    /**
+     * Check received data on payment callback.
+     * 
+     * @return boolean
+     */
+    public function receiveData()
+    {
+        if (isset($_POST['id']) && !empty($_POST['id'])) {
+            $this->trackId = $_POST['id'];
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get track id of payment.
+     * 
+     * @return string
+     */
+    public function getTrackId()
+    {
+        return $this->trackId;
     }
 }
