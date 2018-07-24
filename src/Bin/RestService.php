@@ -20,6 +20,7 @@ use GuzzleHttp\Exception\RequestException;
  */
 class RestService
 {
+    protected $sandBox = false;
     protected $apiKey = 'xxxx-xxxx-xxxx-xxxx';
     protected $endpoint = 'https://www.idpay.ir/api/service/v1/';
 
@@ -88,7 +89,8 @@ class RestService
                     'json' => $data,
                     'headers' => [
                         'Accept'    => 'application/json',
-                        'X-API-Key' => $this->apiKey
+                        'X-API-Key' => $this->apiKey,
+                        'X-SANDBOX' => $this->sandBox
                     ]
                 ]
             );
@@ -137,5 +139,15 @@ class RestService
     public function setApiKey($apiKey)
     {
         $this->apiKey = $apiKey;
+    }
+
+    /**
+     * Set sandbox mode.
+     * 
+     * @return void
+     */
+    public function setSandBox()
+    {
+        $this->sandBox = true;
     }
 }

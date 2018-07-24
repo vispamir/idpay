@@ -21,13 +21,17 @@ class Idpay
 {
     private $service;
     private $trackId;
+    private $data;
     private $paymentPath = 'https://www.idpay.ir/p/ws/';
 
-    public function __construct($apiKey, $endpoint)
+    public function __construct($apiKey, $endpoint, $sandbox = false)
     {
         $this->service = new RestService();
         $this->service->setEndpoint($endpoint);
         $this->service->setApiKey($apiKey);
+        if ($sandbox) {
+            $this->service->setSandBox();
+        }
     }
 
     /**
