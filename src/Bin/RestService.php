@@ -87,9 +87,8 @@ class RestService
                 'POST', $resource, [
                     'json' => $data,
                     'headers' => [
-                        'Accept'        => 'application/json',
-                        'User-Agent'    => 'idpay/1.0',
-                        'IDPay-API-Key' => $this->apiKey
+                        'Accept'    => 'application/json',
+                        'X-API-Key' => $this->apiKey
                     ]
                 ]
             );
@@ -112,7 +111,7 @@ class RestService
             $response = $e->getResponse();
             if (!is_null($response)) {
                 $result['message'] = $response->getBody()->getContents();
-                $result['message'] = json_decode($result, true);
+                $result['message'] = json_decode($result['message'], true);
                 $result['code'] = $response->getStatusCode();
             }
 

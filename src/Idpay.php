@@ -90,7 +90,9 @@ class Idpay
         ];
 
         $result = $this->service->inquiryRequest($data);
-        $result['success'] = !empty($result['amount']) && $result['amount'] == $amount;
+        $result['Success'] = !empty($result['Result']['amount'])
+            && $result['Result']['amount'] == $amount
+            && $result['Result']['status']['id'] == 'success';
 
         return $result;
     }
@@ -113,6 +115,7 @@ class Idpay
     {
         if (isset($_POST['id']) && !empty($_POST['id'])) {
             $this->trackId = $_POST['id'];
+            $this->data = $_POST;
 
             return true;
         }
