@@ -14,6 +14,11 @@ namespace Idpay;
 
 use Idpay\Bin\RestService;
 
+define('PENDING', 1);
+define('RETURNED', 2);
+define('FAILED', 3);
+define('SUCCESS', 100);
+
 /**
  * IDPay payment and inquiry service.
  */
@@ -96,7 +101,7 @@ class Idpay
         $result = $this->service->inquiryRequest($data);
         $result['Success'] = !empty($result['Result']['amount'])
             && $result['Result']['amount'] == $amount
-            && $result['Result']['status']['id'] == 'success';
+            && $result['Result']['status'] == SUCCESS;
 
         return $result;
     }

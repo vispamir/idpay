@@ -43,7 +43,7 @@ class RestService
         } else {
             return [
                 'Status' => 'error',
-                'Message' => $result['message'],
+                'Message' => !empty($result['message']) ? $result['message'] : null,
             ];
         }
     }
