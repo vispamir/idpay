@@ -66,7 +66,7 @@ class Idpay
             $data['phone'] = $phone;
         }
         if (!is_null($description) && !empty($description)) {
-            $data['description'] = $description;
+            $data['desc'] = $description;
         }
 
         $result = $this->service->paymentRequest($data);
